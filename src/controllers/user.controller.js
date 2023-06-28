@@ -6,7 +6,8 @@ const ERROR_MSG = 'el usuario o la contraseña no coinciden.';
 async function LoginUser(req, res){
     try{
         const { email, password } = req.body;
-        const userLogged = await userScheme.findOne({email});
+        const userLogged = await userScheme.findOne({email})
+				.populate("task");
         if(!userLogged){ //condicion para verificar usuario
             return res.status(400).json({
                 ok:false,

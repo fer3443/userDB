@@ -1,4 +1,5 @@
 import taskScheme from "../models/task";
+import userScheme from "../models/user";
 
 //paginacion
 const maxElements = 2;
@@ -7,6 +8,7 @@ async function GetAllTask(req, res){
 	const { page }= req.query; //page se agrega a la url localhost..?page=
 	try {
 		const tasks = await taskScheme.find()
+		.populate("user_id", "nombre email urlPhoto")//puedo agregar las propiedades que quiero traer
 		.skip(page * maxElements)
 		.limit(maxElements);
 		return res.status(200).json({
@@ -54,7 +56,11 @@ async function UpdateTask(req, res){
 }
 async function AddTask(req, res){
 	try {
-		const addTask = await taskScheme.create(req.body);
+		const {user_id} = req.body; //traigo el usuario de la base
+		const user = await userScheme.findById(user_id); //leo ese usuario
+		const addTask = await taskScheme.create(req.body);//creo la tarea
+		user.task.push({_id: addTask._id});//task es la propiedad que agregue en el modelo user
+		user.save();
 		return res.status(200).json({
 			ok: true,
 			addedTask: addTask,

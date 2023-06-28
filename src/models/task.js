@@ -18,6 +18,10 @@ const taskScheme = new Schema({
     eliminado: {
         type: Boolean,
         default: false
+    },
+    user_id:{ //referencia para el document users
+        type: Schema.Types.ObjectId,
+        ref: "users"
     }
 });
 
