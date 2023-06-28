@@ -1,22 +1,51 @@
 import userScheme from '../models/user';
+import  { Compare, Encrypt } from '../helpers/password.helper'
 
-async function GetAllUsers(req, res){
+const ERROR_MSG = 'el usuario o la contraseña no coinciden.';
+
+async function LoginUser(req, res){
     try{
-        const users = await userScheme.find();
-        return res.status(200).json({
-            ok: true,
-            data: users,
-        });
+        const { email, password } = req.body;
+        const userLogged = await userScheme.findOne({email});
+        if(!userLogged){ //condicion para verificar usuario
+            return res.status(400).json({
+                ok:false,
+                error_msg: ERROR_MSG,
+            })
+        }
+        const passwordCheck = await Compare(password, userLogged.passwordHash);
+        if(!passwordCheck){ //condicion para verificar contraseña
+            console.log("no se encontraron coincidencias");
+                return res.status(400).json({
+                    ok: false,
+                    error_msg: ERROR_MSG,
+                });
+        }
+				console.log(userLogged);
+				console.log("usuario logueado con éxito.")
+				return res.status(201).json({
+						ok: true,
+						user: userLogged,
+				})
     }catch(error){
         return res.status(500).json({
             ok: false,
-            error: error,
+            error: ERROR_MSG,
         });
     }
 }
 async function AddUser(req, res){
     try{
-        const addedUser = await userScheme.create(req.body);
+        const { nombre, apellido, email, password, urlPhoto} = req.body;
+        const passwordHash = await Encrypt(password);
+        
+        const addedUser = await userScheme.create({
+            nombre,
+            apellido,
+            email,
+            passwordHash,
+            urlPhoto,
+        });
         return res.status(200).json({
             ok: true,
             addedData: addedUser,
@@ -90,4 +119,4 @@ async function VirtualDelete(req, res){
         })
     }
 }
-export { GetAllUsers, AddUser, UpdateUser, DeleteUser, GetUserById, VirtualDelete };
+export { LoginUser, AddUser, UpdateUser, DeleteUser, GetUserById, VirtualDelete };

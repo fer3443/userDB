@@ -3,7 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { ConnectDB } from './database/database';
-import router from './routes/user.routes';
+import routerUser from './routes/user.routes';
+import routerTask from './routes/task.routes';
 
 dotenv.config();
 
@@ -17,7 +18,8 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use('/api', router);
+app.use('/api', routerUser);
+app.use('/api', routerTask);
 
 ConnectDB();
 

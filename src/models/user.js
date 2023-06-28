@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, SchemaType } from "mongoose";
 import mongoose from "mongoose";
 
 const userScheme = new Schema({
@@ -10,18 +10,17 @@ const userScheme = new Schema({
         type: String,
         require: true
     },
-    username: {
-        type: String,
-        require: true
-    },
-    password: {
-        type: String,
-        require: true
-    },
+    email: String,
+    passwordHash: String,
+    urlPhoto: String,
     creado: {
         type: Date,
         default: Date.now
     },
+    task: [{
+        type: Schema.Types.ObjectId,
+        ref: 'task'
+    }],
     eliminado: {
         type: Boolean,
         default: false
