@@ -7,7 +7,7 @@ async function LoginUser(req, res){
     try{
         const { email, password } = req.body;
         const userLogged = await userScheme.findOne({email})
-				.populate("task");
+				.populate("task", "titulo descripcion");
         if(!userLogged){ //condicion para verificar usuario
             return res.status(400).json({
                 ok:false,
