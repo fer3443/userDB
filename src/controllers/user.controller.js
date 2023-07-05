@@ -23,10 +23,14 @@ async function LoginUser(req, res){
                 });
         }
 				console.log(userLogged);
-				console.log("usuario logueado con éxito.")
+				console.log("usuario logueado con éxito.");
+
+                const token = userLogged.generateAccesToken();//invoco a la funcion creada en user.js
+
 				return res.status(201).json({
 						ok: true,
 						user: userLogged,
+                        token: token,
 				})
     }catch(error){
         return res.status(500).json({
@@ -58,21 +62,6 @@ async function AddUser(req, res){
         })
     }
 }
-async function UpdateUser(req, res){
-    const { id } = req.params;
-    try{
-        const updatedUser = await userScheme.findByIdAndUpdate(id, req.body);
-        return res.status(200).json({
-            ok:true,
-            updateData: updatedUser,
-        })
-    }catch(err){
-        return res.status(500).json({
-            ok: false,
-            error: err,
-        })
-    }
-}
 async function DeleteUser(req, res){
     const { id }= req.params;
     try {
@@ -81,23 +70,6 @@ async function DeleteUser(req, res){
             ok: true,
             deletedData: deletedUser,
         })
-    } catch (error) {
-        return res.status(500).json({
-            ok: false,
-            error: error,
-        })
-    }
-}
-async function GetUserById(req, res){
-    const { id }= req.params;
-    try {
-        const user = await userScheme.findById(id);
-        if(user){
-            return res.status(200).json({
-                ok:true,
-                data: user,
-            })
-        }
     } catch (error) {
         return res.status(500).json({
             ok: false,
@@ -120,4 +92,4 @@ async function VirtualDelete(req, res){
         })
     }
 }
-export { LoginUser, AddUser, UpdateUser, DeleteUser, GetUserById, VirtualDelete };
+export { LoginUser, AddUser, DeleteUser, VirtualDelete };
