@@ -27,6 +27,16 @@ const userScheme = new Schema({
         default: false
     }
 });
+userScheme.set("toJSON", {//sobreescritura del metodo toJSON para limitar la respuesta de los datos al front
+    transform: function (doc, ret){
+        ret.id = ret._id;
+        delete ret.passwordHash;
+        delete ret._id;
+        delete ret.task;
+        delete ret.eliminado;
+        delete ret.__v;
+    }
+})
 userScheme.methods.generateAccesToken = function(){ //mongoose me permite agregar un metodo en tiempo de ejecucion
     const token = jwt.sign({_id: this._id}, "Mi secreto")
     return token;

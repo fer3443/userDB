@@ -12,7 +12,7 @@ async function GetAllTask(req, res){
 		const tasks = await taskScheme.find({//le digo que el user_id tiene que ser igual al recuperado del payload _id
 			user_id: _id,
 		})//de esta manera el usuario solo puede ver las tareas que el creó.
-		.populate("user_id", "nombre email urlPhoto")//puedo agregar las propiedades que quiero traer
+		.populate("user_id")//puedo agregar las propiedades que quiero traer mediante una coma y en una string
 		.skip(page * maxElements)
 		.limit(maxElements);
 		return res.status(200).json({
