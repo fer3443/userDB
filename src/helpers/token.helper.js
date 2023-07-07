@@ -10,7 +10,7 @@ export function Authenticate(req, res, next){
         error_msg:"Usuario no autorizado 1",
     });//esto es en caso de no recibir ese token.
     
-    jwt.verify(token, "Mi secreto", (error, payload) => {
+    jwt.verify(token, process.env.SECRET_KEY, (error, payload) => {
         if(error){
             return res.status(404).json({
                 ok: false,

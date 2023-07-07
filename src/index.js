@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-app.set('PORT', process.env.PORT || 5000);//utiliza la var PORT o el puerto 5000
+app.set('PORT', process.env.PORT);//utiliza la var PORT o el puerto 5000
 
 app.use(morgan('dev'));
 

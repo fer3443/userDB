@@ -38,7 +38,7 @@ userScheme.set("toJSON", {//sobreescritura del metodo toJSON para limitar la res
     }
 })
 userScheme.methods.generateAccesToken = function(){ //mongoose me permite agregar un metodo en tiempo de ejecucion
-    const token = jwt.sign({_id: this._id}, "Mi secreto")
+    const token = jwt.sign({_id: this._id}, process.env.SECRET_KEY)
     return token;
 }
 /*

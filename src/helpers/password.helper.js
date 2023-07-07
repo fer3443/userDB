@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-const saltRounds = 5;
+const saltRounds = process.env.SALT;
 
 async function Encrypt(password){
     return await bcrypt.hash( password, saltRounds);
